@@ -8,7 +8,7 @@ services:
       context: ./
       dockerfile: express.dockerfile
     volumes:
-      - ./:/app
+      - ./:/usr/src/app
     environment:
       - "APP_TEST=test"      
     ports:

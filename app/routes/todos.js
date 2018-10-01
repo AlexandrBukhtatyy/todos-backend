@@ -1,8 +1,29 @@
+var database = require('../database/database');
 var express = require('express');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    res.send('GET /todos');
+    var appData = {};
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData['error'] = 1;
+            appData['data'] = 'Internal Server Error';
+            res.status(500).json(appData);
+        } else {
+            connection.query('SELECT * FROM `todos`', function (err, rows, fields) {
+                if (!err) {
+                    appData.error = 0;
+                    appData['data'] = rows;
+                    res.status(200).json(appData);
+                } else {
+                    appData['data'] = 'Error Occured!';
+                    res.status(400).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
+    // res.send('GET /todos');
 });
 
 router.get('/:id', function (req, res) {
