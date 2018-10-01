@@ -1,5 +1,5 @@
 var express = require('express');
-var database = require('../database/database');
+var database = require('../../database/database');
 var router = express.Router();
 
 router.get('/wim', function (req, res) {
@@ -15,6 +15,14 @@ router.get('/logout', function (req, res) {
 });
 
 router.post('/register', function (req, res) {
+var today = new Date();
+    var userData = {
+        'first_name': req.body.first_name,
+        'last_name': req.body.last_name,
+        'email': req.body.email,
+        'password': req.body.password,
+        'created': today
+    }
     var appData = {};
     database.connection.getConnection(function (err, connection) {
         if (err) {
@@ -35,7 +43,6 @@ router.post('/register', function (req, res) {
             connection.release();
         }
     });
-    // res.send('post /register');
 });
 
 module.exports = router;
