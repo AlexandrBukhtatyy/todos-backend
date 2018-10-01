@@ -1,10 +1,10 @@
+require('dotenv').load();
 var express = require('express');
 var app = express();
-var APP_PORT = 8080;
+var APP_PORT = process.env.APP_PORT || 8080;
 
 app.get('/', function (req, res) {
-    //safsf
-    res.send(`hello world!!`);
+    res.send(`hello world!! from: ` + process.env.APP_NAME);
 })
 
 app.listen(APP_PORT, function () {
