@@ -10,7 +10,8 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
-      - "APP_TEST=test"      
+      - "ENV=DEV"
+      - "APP_TEST=test"
     ports:
       - "8080:8080"
     links:

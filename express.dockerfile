@@ -5,10 +5,6 @@ VOLUME /usr/src/app
 
 COPY package.json ./
 COPY cmd.sh /
-RUN npm install
-
-# If you are building your code for production
-# RUN npm install --only=production
 
 COPY . .
 
