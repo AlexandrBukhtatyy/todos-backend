@@ -12,10 +12,9 @@ app.use(bodyParser.json());
 app.use('/', routes);
 
 app.get('/', function (req, res) {
-    res.send(`hello world!!! (${config.name})`);
+    res.send(`hello world!!! (${config.NAME})`);
 })
 
-
-app.listen(config.port, function () {
-    console.log(`app listening on port ${config.port}!`);
+app.listen(config.PORT, function () {
+    console.log(`app listening on port ${config.PORT}!`);
 })
