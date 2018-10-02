@@ -1,4 +1,4 @@
-var database = require('../../database/database');
+var database = require('../../config/database');
 var express = require('express');
 var router = express.Router();
 
@@ -49,7 +49,34 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    res.send('POST /todos');
+    var today = new Date();
+    var todoData = {
+        'author': req.body.author,
+        'title': req.body.title,
+        'text': req.body.text,
+        'status': req.body.status,
+        'created': today
+    }
+    var appData = {};
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData['error'] = 1;
+            appData['data'] = 'Internal Server Error';
+            res.status(500).json(appData);
+        } else {
+            connection.query(`INSERT INTO todos SET ? `, todoData, function (err, rows, fields) {
+                if (!err) {
+                    appData.error = 0;
+                    appData['data'] = 'Todo registered successfully!';
+                    res.status(201).json(appData);
+                } else {
+                    appData['data'] = 'Error Occured!';
+                    res.status(400).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
 });
 
 router.put('/', function (req, res) {

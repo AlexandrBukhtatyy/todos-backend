@@ -1,17 +1,21 @@
 require('dotenv').load();
-var routes = require('./routes');
-var userRoutes = require('./routes/api/user');
+var bodyParser = require('body-parser');
+var config = require('./config');
 var express = require('express');
+var routes = require('./routes');
+
 var app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use('/', routes);
 
 app.get('/', function (req, res) {
-    res.send(`hello world!! (${process.env.APP_NAME})`);
+    res.send(`hello world!!! (${config.name})`);
 })
 
 
-app.listen(process.env.APP_PORT, function () {
-    console.log(`app listening on port ${process.env.APP_PORT}!`);
+app.listen(config.port, function () {
+    console.log(`app listening on port ${config.port}!`);
 })
