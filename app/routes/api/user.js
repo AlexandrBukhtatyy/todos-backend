@@ -1,4 +1,6 @@
 var express = require('express');
+var crypto = require('crypto');
+var config = require('../../config');
 var database = require('../../config/database');
 var router = express.Router();
 
@@ -7,7 +9,41 @@ router.get('/wim', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
-    res.send('post /login');
+    
+    // Проверить на наличие записи в бд
+    database.connection.getConnection(function (err, connection) {
+        var appData = {};
+        if (err) {
+
+            appData['error'] = 1;
+            appData['data'] = 'Internal Server Error';
+            res.status(500).json(appData);
+
+        } else {
+            // Проверяем пользователя с указаным email в БД
+            connection.query(`SELECT * FROM users WHERE email='${req.body.email}'`, function (err, rows, fields) {
+                
+                if (!err) {
+                    // Сверить пароль в бд и пароль переданный пользователем
+                    let formLoginHash = crypto.createHmac('sha256', config.APP_SECRET).update(req.body.password).digest('hex')
+                    if (rows[0].password == formLoginHash) {
+                        appData.error = 0;
+                        appData['data'] = 'User login successfully!';
+                        res.status(201).json(appData);
+                    } else {
+                        appData['error'] = 1;
+                        appData['data'] = 'Internal Server Error';
+                        res.status(500).json(appData);                        
+                    }
+                } else {
+                    appData['data'] = 'Error Occured!';
+                    res.status(400).json(appData);
+                }
+
+            });
+            connection.release();
+        }
+    });    
 });
 
 router.get('/logout', function (req, res) {
@@ -20,10 +56,14 @@ router.post('/register', function (req, res) {
         'first_name': req.body.first_name,
         'last_name': req.body.last_name,
         'email': req.body.email,
-        'password': req.body.password,
+        'password': crypto.createHmac('sha256', config.APP_SECRET)
+            .update(req.body.password)
+            .digest('hex'),
         'created': today
     }
+
     var appData = {};
+    
     database.connection.getConnection(function (err, connection) {
         if (err) {
             appData['error'] = 1;
