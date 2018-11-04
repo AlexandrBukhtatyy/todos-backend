@@ -15,17 +15,8 @@ services:
     ports:
       - "8080:8080"
     links:
-      - redis
       - database
-  # The Redis
-  redis:
-    container_name: redis
-    image: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./data/redis:/data
-    restart: always      
+
   # The Database
   database:
     image: mysql:5.6

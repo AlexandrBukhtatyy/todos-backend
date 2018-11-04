@@ -1,8 +1,15 @@
+var config = require('../../config');
 var database = require('../../config/database');
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 
-router.get('/', function (req, res) {
+var auth = function (req, res, next) {
+    console.log(jwt.verify(req.headers['authorization'].slice(7),config.APP_SECRET));
+    next();
+}
+
+router.get('/', auth, function (req, res) {
     var appData = {};
     database.connection.getConnection(function (err, connection) {
         if (err) {

@@ -1,5 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
+var expressJwt = require('express-jwt');
+var jwt = require('jsonwebtoken');
 var config = require('../../config');
 var database = require('../../config/database');
 var router = express.Router();
@@ -27,8 +29,9 @@ router.post('/login', function (req, res) {
                     // Сверить пароль в бд и пароль переданный пользователем
                     let formLoginHash = crypto.createHmac('sha256', config.APP_SECRET).update(req.body.password).digest('hex')
                     if (rows[0].password == formLoginHash) {
+                        var access_token = jwt.sign({ userId: rows[0].id }, config.APP_SECRET);
                         appData.error = 0;
-                        appData['data'] = 'User login successfully!';
+                        appData['data'] = {access_token: access_token};
                         res.status(201).json(appData);
                     } else {
                         appData['error'] = 1;
