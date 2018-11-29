@@ -3,10 +3,10 @@ FROM node:8
 WORKDIR /usr/src/app
 VOLUME /usr/src/app
 
-COPY package.json ./
-COPY cmd.sh /
+#COPY package.json ./
+#COPY cmd.sh /
 
-COPY . .
+#COPY . .
 
 EXPOSE 8080
-CMD ["/cmd.sh"]
+CMD ["./cmd.sh"]

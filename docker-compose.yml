@@ -5,8 +5,8 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./
-      dockerfile: express.dockerfile
+      context: ./docker/express/
+      dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
     environment:

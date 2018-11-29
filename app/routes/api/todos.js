@@ -5,11 +5,12 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 var auth = function (req, res, next) {
-    console.log(jwt.verify(req.headers['authorization'].slice(7),config.APP_SECRET));
+    console.log(jwt.verify(req.headers['authorization'],config.APP_SECRET));
     next();
 }
 
-router.get('/', auth, function (req, res) {
+// router.get('/', auth, function (req, res) {
+router.get('/', function (req, res) {
     var appData = {};
     database.connection.getConnection(function (err, connection) {
         if (err) {
