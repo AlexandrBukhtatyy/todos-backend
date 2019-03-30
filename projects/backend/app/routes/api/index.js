@@ -3,17 +3,13 @@ var router = require('express').Router();
 var jwt = require('jsonwebtoken');
 
 var auth = function (req, res, next) {
-    if (req.headers['authorization']) {
-        if (jwt.verify(req.headers['authorization'].replace(/^Bearer\s/, ''), config.APP_SECRET)) {
-            // CORRECT JWT Token
-            next();
-        } else {
-            // INCORRECT JWT Token
-            next();
-        }
-    } else {
-        // NOT FOUND Authorization-header
+    var token = req.headers['authorization'].split(' ')[1] || null ;
+    if (token && jwt.verify(token, config.APP_SECRET)) {
+        // CORRECT JWT Token
         next();
+    } else {
+        // INVALID JWT Tokens
+        res.status(500).json({error:'login is required'});
     }
 }
 
