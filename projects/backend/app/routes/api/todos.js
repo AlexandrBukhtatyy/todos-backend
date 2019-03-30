@@ -1,15 +1,7 @@
-var config = require('../../config');
 var database = require('../../config/database');
 var express = require('express');
 var router = express.Router();
-var jwt = require('jsonwebtoken');
 
-var auth = function (req, res, next) {
-    console.log(jwt.verify(req.headers['authorization'],config.APP_SECRET));
-    next();
-}
-
-// router.get('/', auth, function (req, res) {
 router.get('/', function (req, res) {
     var appData = {};
     database.connection.getConnection(function (err, connection) {
@@ -123,7 +115,26 @@ router.put('/:id', function (req, res) {
 });
 
 router.delete('/:id', function (req, res) {
-    res.send('DELETE /todos');
+    var appData = {};
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData['error'] = 1;
+            appData['data'] = 'Internal Server Error';
+            res.status(500).json(appData);
+        } else {
+            connection.query(`DELETE FROM todos WHERE id=${req.params.id}`, function (err, rows, fields) {
+                if (!err) {
+                    appData.error = 0;
+                    appData['data'] = 'Todo deleted successfully!';
+                    res.status(201).json(appData);
+                } else {
+                    appData['data'] = 'Error Occured!';
+                    res.status(400).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
 });
 
 module.exports = router;
