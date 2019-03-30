@@ -87,8 +87,42 @@ router.post('/', function (req, res) {
     });
 });
 
-router.put('/', function (req, res) {
-    res.send('PUT /todos');
+router.put('/:id', function (req, res) {
+    // res.send('PUT /todos');
+    // var today = new Date();
+    var todoData = {
+        'author': req.body.author,
+        'title': req.body.title,
+        'text': req.body.text,
+        'status': req.body.status
+    }
+    var collsForUpdating = [];
+    for(attr in todoData) {
+        if (todoData[attr]) {
+            collsForUpdating.push(`${attr} = '${todoData[attr]}'`);
+        }
+    }
+    console.log(`UPDATE todos SET ${collsForUpdating.join(' ,')} WHERE id=${req.params.id}`);
+    var appData = {};
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData['error'] = 1;
+            appData['data'] = 'Internal Server Error';
+            res.status(500).json(appData);
+        } else {
+            connection.query(`UPDATE todos SET ${collsForUpdating.join(' ,')} WHERE id=${req.params.id}`, function (err, rows, fields) {
+                if (!err) {
+                    appData.error = 0;
+                    appData['data'] = 'Todo updated successfully!';
+                    res.status(201).json(appData);
+                } else {
+                    appData['data'] = 'Error Occured!';
+                    res.status(400).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
 });
 
 router.delete('/:id', function (req, res) {
