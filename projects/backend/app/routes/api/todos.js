@@ -88,8 +88,6 @@ router.post('/', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
-    // res.send('PUT /todos');
-    // var today = new Date();
     var todoData = {
         'author': req.body.author,
         'title': req.body.title,
@@ -102,7 +100,6 @@ router.put('/:id', function (req, res) {
             collsForUpdating.push(`${attr} = '${todoData[attr]}'`);
         }
     }
-    console.log(`UPDATE todos SET ${collsForUpdating.join(' ,')} WHERE id=${req.params.id}`);
     var appData = {};
     database.connection.getConnection(function (err, connection) {
         if (err) {
