@@ -12,3 +12,11 @@ docker-compose up               // Запустить контейнеры
 docker-compose stop             // Остановить контейнеры
 docker-compose start            // Запустить контейнеры
 ```
+
+-------------------------------------------------------------------
+почему то не устанавливается nodemon в контейнере внутри ВМ-vagrant
+если поставить его глобально в образе он не обновляет при изменение файлов
+
+https://stackoverflow.com/questions/51508150/standard-init-linux-go190-exec-user-process-caused-no-such-file-or-directory
+
+https://github.com/npm/npm/issues/20605

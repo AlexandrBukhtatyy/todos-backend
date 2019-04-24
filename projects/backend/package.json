@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:start": "nodemon ./app/index.js",
-    "prod:start": "nodemon ./app/index.js",
+    "dev:start": "nodemon -L ./app/index.js",
+    "prod:start": "nodemon -L ./app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -20,6 +20,6 @@
     "mysql": "^2.16.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.11"
   }
 }

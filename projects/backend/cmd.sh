@@ -4,7 +4,8 @@ set -e
 if [ "$ENV" = 'DEV' ]
 then
     echo "Running Development Server"
-    npm install
+    npm --no-bin-links install
+    npm i -g nodemon
     exec npm run dev:start
 elif [ "$ENV" = 'UNIT' ]
 then

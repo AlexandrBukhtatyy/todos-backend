@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use('/', routes);
 
 app.get('/', function (req, res) {
-    res.send(`hello world!!! (${config.NAME})`);
+    res.send(`hello world! (${config.NAME})`);
 })
 
 app.listen(config.PORT, function () {
