@@ -20,6 +20,9 @@ vagrant ssh
 /*---------------*/
 cd /vagrant
 docker-compose up
+docker run -e "ENV=DEV" -v $(pwd)/projects/backend:/usr/src/app -p 8080:8080 vagrant_backend
+// standard_init_linux.go:190: exec user process caused "no such file or directory"
+(Use notepad++, go to edit -> EOL conversion -> change from CRLF to LF.)
 ```
 -------------------------------------------------------------------
 почему то не устанавливается nodemon в контейнере внутри ВМ-vagrant
