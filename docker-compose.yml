@@ -5,10 +5,10 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./docker/express/
-      dockerfile: Dockerfile
+      context: ./projects/express/
+      dockerfile: projects/express/Dockerfile
     volumes:
-      - ./projects/backend:/usr/src/app
+      - ./projects/express:/usr/src/app
     environment:
       - "ENV=DEV"
       - "APP_TEST=test"
@@ -30,7 +30,8 @@ services:
       - "MYSQL_ROOT_PASSWORD=secret"
     ports:
         - "3306:3306"
-  #phpmyadmin        
+
+  #phpmyadmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
