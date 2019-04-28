@@ -11,6 +11,12 @@ app.use(bodyParser.json());
 
 app.use('/', routes);
 
+app.use((err, req, res, next) => {
+    if (err) {
+        res.status(err.status || 500).json({ code: err.code || 'Error', message: err.toString() });
+    }
+});
+
 app.get('/', function (req, res) {
     res.send(`hello world (${config.NAME})!`);
 })
