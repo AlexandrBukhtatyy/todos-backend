@@ -16,18 +16,17 @@ docker-compose start            // Запустить контейнеры
 -------------------------------------------------------------------
 ```
 vagrant up
-vagrant ssh
-/*---------------*/
-cd /vagrant
-docker-compose up
-docker run -e "ENV=DEV" -v $(pwd)/projects/backend:/usr/src/app -p 8080:8080 vagrant_backend
-// standard_init_linux.go:190: exec user process caused "no such file or directory"
+vagrant ssh, cd /vagrant || vagrant ssh -c "cd /vagrant && bash"
+docker-compose up -d
+/* docker run -e "ENV=DEV" -v $(pwd)/projects/backend:/usr/src/app -p 8080:8080 vagrant_backend
+standard_init_linux.go:190: exec user process caused "no such file or directory"
 (Use notepad++, go to edit -> EOL conversion -> change from CRLF to LF.)
+*/
 ```
 -------------------------------------------------------------------
+
+#### Проблемы возникшие в процессе конфигурирования докера
 почему то не устанавливается nodemon в контейнере внутри ВМ-vagrant
 если поставить его глобально в образе он не обновляет при изменение файлов
-
 https://stackoverflow.com/questions/51508150/standard-init-linux-go190-exec-user-process-caused-no-such-file-or-directory
-
 https://github.com/npm/npm/issues/20605
