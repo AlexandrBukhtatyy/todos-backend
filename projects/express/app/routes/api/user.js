@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../../config');
 var database = require('../../config/database');
 var router = express.Router();
+var throwError = require('../../helpers');
 
 router.get('/wim', function (req, res) {
     res.send('GET /who-i-am');
@@ -16,36 +17,25 @@ router.post('/login', function (req, res) {
     database.connection.getConnection(function (err, connection) {
         var appData = {};
         if (err) {
-
-            appData['error'] = 1;
-            appData['data'] = 'Internal Server Error';
-            res.status(500).json(appData);
-
-        } else {
+            throwError(500, 'Internal Server Error', 'Internal Server Error');
+        }
             // Проверяем пользователя с указаным email в БД
-            connection.query(`SELECT * FROM users WHERE email='${req.body.email}'`, function (err, rows, fields) {
-                
-                if (!err) {
-                    // Сверить пароль в бд и пароль переданный пользователем
-                    let formLoginHash = crypto.createHmac('sha256', config.APP_SECRET).update(req.body.password).digest('hex')
-                    if (rows[0].password == formLoginHash) {
-                        var access_token = jwt.sign({ userId: rows[0].id }, config.APP_SECRET);
-                        appData.error = 0;
-                        appData['data'] = {access_token: access_token};
-                        res.status(201).json(appData);
-                    } else {
-                        appData['error'] = 1;
-                        appData['data'] = 'Internal Server Error';
-                        res.status(500).json(appData);                        
-                    }
-                } else {
-                    appData['data'] = 'Error Occured!';
-                    res.status(400).json(appData);
-                }
-
+        connection.query(`SELECT * FROM users WHERE email='${req.body.email}'`, function (err, rows, fields) {
+            if (err) {
+                throwError(500, 'Internal Server Error', 'Internal Server Error');
+            }
+            // Сверить пароль в бд и пароль переданный пользователем
+            let formLoginHash = crypto.createHmac('sha256', config.APP_SECRET).update(req.body.password).digest('hex')
+            if (rows[0].password == formLoginHash) {
+                var access_token = jwt.sign({ userId: rows[0].id }, config.APP_SECRET);
+                appData.error = 0;
+                appData['data'] = {access_token: access_token};
+                res.status(201).json(appData);
+            } else {
+                throwError(500, 'Internal Server Error', 'Internal Server Error');                        
+            }
             });
             connection.release();
-        }
     });    
 });
 
@@ -69,19 +59,15 @@ router.post('/register', function (req, res) {
     
     database.connection.getConnection(function (err, connection) {
         if (err) {
-            appData['error'] = 1;
-            appData['data'] = 'Internal Server Error';
-            res.status(500).json(appData);
+            throwError(500, 'Internal Server Error', 'Internal Server Error');
         } else {
             connection.query(`INSERT INTO users SET ? `, userData, function (err, rows, fields) {
-                if (!err) {
-                    appData.error = 0;
-                    appData['data'] = 'User registered successfully!';
-                    res.status(201).json(appData);
-                } else {
-                    appData['data'] = 'Error Occured!';
-                    res.status(400).json(appData);
+                if (err) {
+                    throwError(500, 'Internal Server Error', 'Internal Server Error');
                 }
+                appData.error = 0;
+                appData['data'] = 'User registered successfully!';
+                res.status(201).json(appData);
             });
             connection.release();
         }

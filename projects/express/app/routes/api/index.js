@@ -7,11 +7,8 @@ var auth = function (req, res, next) {
     if(req.headers['authorization']) {
         var token = req.headers['authorization'].split(' ')[1] || null ;
         if (token && jwt.verify(token, config.APP_SECRET)) {
-            // CORRECT JWT Token
             next();
         } else {
-            // INVALID JWT Tokens
-            // res.status(500).json({error:'login is required'});
             throwError(400, 'Invalid JWT', 'Invalid JWT token. The token is expired');
         }
     } else {
