@@ -25,5 +25,5 @@ docker-compose start                // Запустить контейнеры
 ```
 -------------------------------------------------------------------
 
-#### Заметки
+## Заметки
 * standard_init_linux.go:190: exec user process caused "no such file or directory" - Use notepad++, go to edit -> EOL conversion -> change from CRLF to LF.
