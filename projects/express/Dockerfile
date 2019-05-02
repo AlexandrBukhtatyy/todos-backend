@@ -4,4 +4,4 @@ WORKDIR /usr/src/app
 VOLUME /usr/src/app
 
 EXPOSE 8080
-CMD ["./cmd.sh"]
+CMD ["./docker-entrypoint.sh"]
