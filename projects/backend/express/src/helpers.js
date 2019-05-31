@@ -9,9 +9,9 @@ const throwError = function (status, code, message) {
     throw error;
 }
 
-var auth = function (req, res, next) {
+const auth = function (req, res, next) {
     if(req.headers['authorization']) {
-        var token = req.headers['authorization'].split(' ')[1] || null ;
+        const token = req.headers['authorization'].split(' ')[1] || null ;
         if (token && jwt.verify(token, config.APP_SECRET)) {
             next();
         } else {
