@@ -1,7 +1,13 @@
-var config = require('../../config');
-var router = require('express').Router();
+var config = require('./config');
 var jwt = require('jsonwebtoken');
-var throwError = require('../../helpers');
+
+const throwError = function (status, code, message) {
+    const error = new Error(message);
+    error.name = '';
+    error.status = status;
+    error.code = code;
+    throw error;
+}
 
 var auth = function (req, res, next) {
     if(req.headers['authorization']) {
@@ -16,7 +22,7 @@ var auth = function (req, res, next) {
     }
 }
 
-router.use('/user', auth, require('./user'));
-router.use('/todos', auth, require('./todos'));
-
-module.exports = router;
+module.exports = {
+    throwError,
+    auth
+};

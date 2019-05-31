@@ -1,14 +1,14 @@
-version: '2'
+version: '3.1'
 services:
 
   # The backend
   backend:
     container_name: backend
     build:
-      context: ./projects/express/
+      context: projects/backend/express/
       dockerfile: Dockerfile
     volumes:
-      - ./projects/express:/usr/src/app
+      - ./projects/backend/express:/usr/src/app
     environment:
       - "ENV=DEV"
       - "APP_TEST=test"

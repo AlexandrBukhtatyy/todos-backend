@@ -5,7 +5,7 @@
 ## Начало работы
 ```
 vagrant up
-vagrant ssh, cd /vagrant или vagrant ssh -c "cd /vagrant && bash"
+vagrant ssh -c "cd /vagrant && bash"
 docker-compose up -d
 ```
 
