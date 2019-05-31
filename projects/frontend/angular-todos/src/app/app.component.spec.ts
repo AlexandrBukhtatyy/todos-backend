@@ -14,6 +14,11 @@ describe('AppComponent', () => {
     }).compileComponents();
   }));
 
+  it('Should match to snapshot', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    (<any>expect(fixture)).toMatchSnapshot();
+  });
+
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
