@@ -4,7 +4,9 @@ var throwError = require('../../helpers');
 var models = require("../../models");
 
 router.get('/', function (req, res) {
-    models.Todo.findAll().then(
+    models.Todo.findAll({
+        ...req.sequelizeQueryData
+    }).then(
         (response) => {
             res.status(200).json(response);
         },

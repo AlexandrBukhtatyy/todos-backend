@@ -7,6 +7,10 @@ var throwError = require('../../helpers');
 var models = require("../../models");
 
 router.get('/wim', function (req, res) {
+    console.log('req.query:');
+    console.log(req.query);
+    console.log('TEST:');
+    console.log(req.sequelizeQueryData.where);
     res.send('GET /who-i-am');
 });
 

@@ -1,5 +1,6 @@
-var config = require('./config');
-var jwt = require('jsonwebtoken');
+const config = require('./config');
+const jwt = require('jsonwebtoken');
+const Sequelize = require('sequelize');
 
 const throwError = function (status, code, message) {
     const error = new Error(message);
@@ -22,7 +23,23 @@ const auth = function (req, res, next) {
     }
 }
 
+const sequelizeQueryData = function (req, res, next) {
+    req.sequelizeQueryData = {
+        ...(req.query.offset && {offset: req.query.offset}),
+        ...(req.query.limit && {limit: req.query.limit}),
+        order: [
+            // ...(req.query.sort && {sort: req.query.sort}),
+        ],
+        // TODO: доработать что бы можно было использовать операторы типа Sequelize.Op.or
+        ...(req.query.filter && {where: Object.keys(req.query.filter).forEach((filterKey) => {
+            const newValue = { [filterKey]: req.query.filter[filterKey] };
+        })})
+    }
+    next();
+}
+
 module.exports = {
     throwError,
-    auth
+    auth,
+    sequelizeQueryData
 };
