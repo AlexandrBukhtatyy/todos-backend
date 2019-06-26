@@ -5,10 +5,10 @@ services:
   backend:
     container_name: backend
     build:
-      context: projects/backend/express/
+      context: server/
       dockerfile: Dockerfile
     volumes:
-      - ./projects/backend/express:/usr/src/app
+      - ./server:/usr/src/app
     environment:
       - "ENV=DEV"
       - "APP_TEST=test"

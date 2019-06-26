@@ -6,7 +6,7 @@
 ```
 vagrant up
 vagrant ssh -c "cd /vagrant && bash"
-docker-compose up -d
+docker-compose up
 ```
 
 ## Команды 
