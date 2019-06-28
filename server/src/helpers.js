@@ -11,8 +11,8 @@ const throwError = function (status, code, message) {
 }
 
 const auth = function (req, res, next) {
-    if(req.headers['authorization']) {
-        const token = req.headers['authorization'].split(' ')[1] || null ;
+    if (req.headers['authorization']) {
+        const token = req.headers['authorization'].split(' ')[1] || null;
         if (token && jwt.verify(token, config.APP_SECRET)) {
             next();
         } else {
@@ -25,17 +25,28 @@ const auth = function (req, res, next) {
 
 const sequelizeQueryData = function (req, res, next) {
     req.sequelizeQueryData = {
-        ...(req.query.offset && {offset: req.query.offset}),
-        ...(req.query.limit && {limit: req.query.limit}),
-        order: [
-            // ...(req.query.sort && {sort: req.query.sort}),
-        ],
+        ...(req.query.offset && { offset: parseInt(req.query.offset) }),
+        ...(req.query.limit && { limit: parseInt(req.query.limit) }),
+        ...(req.query.sort && {
+            order: req.query.sort.split(',').map((param) => {
+                var attr = param;
+                var order = 'ASC';
+                if (attr.match(/^\-/)) {
+                    order = 'DESC';
+                    attr = param.slice(1);
+                }
+                if (attr.match(/^\+/)) {
+                    attr = param.slice(1);
+                }
+                return [attr, order]
+            })
+        }),
         // TODO: доработать что бы можно было использовать операторы типа Sequelize.Op.or
-        ...(req.query.filter && {where: Object.keys(req.query.filter).forEach((filterKey) => {
-            const newValue = { [filterKey]: req.query.filter[filterKey] };
-        })})
+        // ...(req.query.filter && {where: Object.keys(req.query.filter).forEach((filterKey) => {
+        //     const newValue = { [filterKey]: req.query.filter[filterKey] };
+        // })})
     }
-    next();
+next();
 }
 
 module.exports = {

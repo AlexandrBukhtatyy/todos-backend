@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var throwError = require('../../helpers');
+var {throwError} = require('../../helpers');
 var models = require("../../models");
 
 router.get('/', function (req, res) {
+    console.log('sequelizeQueryData: ', req.sequelizeQueryData);
     models.Todo.findAll({
         ...req.sequelizeQueryData
     }).then(
